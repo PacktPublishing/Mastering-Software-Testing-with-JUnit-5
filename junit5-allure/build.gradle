@@ -1,0 +1,77 @@
+buildscript {
+    ext {
+        junitPlatformVersion = '1.0.0-M4'
+    }
+    repositories {
+        jcenter()
+        mavenCentral()
+    }
+    dependencies {
+        classpath("org.junit.platform:junit-platform-gradle-plugin:${junitPlatformVersion}")
+    }
+}
+
+repositories {
+    mavenCentral()
+}
+
+ext {
+    junitJupiterVersion = '5.0.0-M4'
+    allureJUnit5Version = '2.0-BETA17'
+    aspectjVersion = '1.8.10'
+}
+
+apply plugin: 'java'
+apply plugin: 'eclipse'
+apply plugin: 'idea'
+apply plugin: 'org.junit.platform.gradle.plugin'
+
+configurations {
+    agent
+}
+
+task wrapper(type: Wrapper) {
+    gradleVersion '4.1'
+}
+
+jar {
+    baseName = 'junit5-allure'
+    version = '1.0.0'
+}
+
+compileTestJava {
+    sourceCompatibility = 1.8
+    targetCompatibility = 1.8
+    options.compilerArgs += '-parameters'
+}
+
+dependencies {
+    agent "org.aspectj:aspectjweaver:${aspectjVersion}"
+
+    testCompile("io.qameta.allure:allure-junit5:${allureJUnit5Version}")
+    testCompile("org.junit.jupiter:junit-jupiter-api:${junitJupiterVersion}")
+    testRuntime("org.junit.jupiter:junit-jupiter-engine:${junitJupiterVersion}")
+}
+
+junitPlatform {
+    filters {
+        engines {
+            include 'junit-jupiter'
+        }
+        includeClassNamePattern '.*Test'
+    }
+    enableStandardTestTask true
+}
+
+tasks.withType(JavaExec) {
+    if (it.name == 'junitPlatformTest') {
+        doFirst {
+            jvmArgs "-javaagent:${configurations.agent.singleFile}"
+        }
+    }
+}
+
+afterEvaluate {
+    def junitPlatformTestTask = tasks.getByName('junitPlatformTest')
+    junitPlatformTestTask.systemProperty 'allure.results.directory', 'build/allure-results'
+}
