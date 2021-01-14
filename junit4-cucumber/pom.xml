@@ -7,7 +7,7 @@
 
     <properties>
         <!-- Dependency versions -->
-        <junit.version>4.12</junit.version>
+        <junit.version>4.13.1</junit.version>
         <cucumber.version>2.0.0-SNAPSHOT</cucumber.version>
 
         <!-- Java 8 -->
