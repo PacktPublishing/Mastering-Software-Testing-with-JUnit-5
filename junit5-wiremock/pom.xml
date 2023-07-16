@@ -10,7 +10,7 @@
         <junit.jupiter.version>5.0.0</junit.jupiter.version>
         <junit.platform.version>1.0.0</junit.platform.version>
         <wiremock.version>2.8.0</wiremock.version>
-        <retrofit.version>2.3.0</retrofit.version>
+        <retrofit.version>2.5.0</retrofit.version>
         <slf4j.version>1.7.12</slf4j.version>
         <maven-surefire-plugin.version>2.19.1</maven-surefire-plugin.version>
 
